@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Business</title>
+<meta name="theme-color" content="#0B7A66">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --accent: #0B7A66;
+    --ink: #17231F;
+    --muted: #5C6B66;
+    --paper: #F2F5F3;
+    --card: #FFFFFF;
+    --line: #DCE4E0;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    font-family: "Bricolage Grotesque", system-ui, -apple-system, "Segoe UI", sans-serif;
+    background: var(--paper);
+    color: var(--ink);
+    line-height: 1.5;
+    min-height: 100vh;
+  }
+  a { color: inherit; }
+  :focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
+
+  .wrap { max-width: 520px; margin: 0 auto; padding: 0 20px 48px; }
+
+  /* Hero */
+  .hero { padding: 44px 0 28px; }
+  .hero h1 {
+    font-size: clamp(2.4rem, 11vw, 3.4rem);
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: -0.035em;
+  }
+  .hero .tagline { margin-top: 12px; font-size: 1.1rem; color: var(--muted); max-width: 30ch; }
+  .status {
+    display: inline-flex; align-items: center; gap: 8px;
+    margin-top: 20px; padding: 7px 14px;
+    background: var(--card); border: 1px solid var(--line);
+    border-radius: 999px; font-size: .92rem; font-weight: 600;
+  }
+  .dot { width: 9px; height: 9px; border-radius: 50%; background: #9AA8A3; }
+  .status.open .dot { background: #1FA45A; }
+  .status.closed .dot { background: #C9503C; }
+
+  /* Section headings */
+  h2 { font-size: 1.15rem; font-weight: 800; letter-spacing: -0.01em; margin: 34px 0 12px; }
+
+  /* Chat channels: the memorable part */
+  .channels { display: grid; gap: 10px; }
+  .channel {
+    display: flex; align-items: center; gap: 14px;
+    min-height: 68px; padding: 12px 16px 12px 12px;
+    background: var(--card);
+    border: 1.5px solid var(--ink);
+    border-radius: 20px;
+    text-decoration: none;
+    box-shadow: 0 4px 0 var(--ink);
+    transition: transform .08s, box-shadow .08s;
+  }
+  .channel:active { transform: translateY(4px); box-shadow: 0 0 0 var(--ink); }
+  .mark {
+    flex: none; width: 44px; height: 44px; border-radius: 14px;
+    display: grid; place-items: center;
+    color: #fff; font-weight: 800; font-size: 1rem; letter-spacing: -0.02em;
+  }
+  .channel .name { font-weight: 800; font-size: 1.08rem; line-height: 1.2; }
+  .channel .handle { font-size: .88rem; color: var(--muted); }
+  .channel .go { margin-left: auto; font-weight: 600; font-size: .9rem; color: var(--accent); }
+
+  /* Card blocks */
+  .block {
+    background: var(--card); border: 1px solid var(--line);
+    border-radius: 14px; padding: 6px 18px;
+  }
+
+  /* Menu with dotted leaders */
+  .item { padding: 14px 0; border-bottom: 1px solid var(--line); }
+  .item:last-child { border-bottom: 0; }
+  .item .row { display: flex; align-items: baseline; gap: 8px; }
+  .item .title { font-weight: 600; }
+  .item .fill { flex: 1; border-bottom: 2px dotted #B9C6C1; transform: translateY(-4px); min-width: 12px; }
+  .item .price { font-weight: 800; }
+  .item .desc { font-size: .9rem; color: var(--muted); margin-top: 2px; }
+
+  /* Hours */
+  .hours-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--line); font-size: .98rem; }
+  .hours-row:last-child { border-bottom: 0; }
+  .hours-row.today { font-weight: 800; color: var(--accent); }
+
+  /* Location */
+  .place { padding: 14px 0; }
+  .place a {
+    display: inline-block; margin-top: 8px; font-weight: 800;
+    color: var(--accent); text-underline-offset: 4px;
+  }
+
+  footer { margin-top: 40px; text-align: center; font-size: .85rem; color: var(--muted); }
+  footer a { font-weight: 600; }
+
+  [hidden] { display: none !important; }
+  @media (prefers-reduced-motion: reduce) { .channel { transition: none; } }
+</style>
+</head>
+<body>
+
+<!-- ============================================================
+     EDIT ONLY THIS BLOCK FOR EACH NEW CUSTOMER
+     Leave a channel as "" to hide its button.
+     ============================================================ -->
+<script>
+const CONFIG = {
+  name: "Bean & Go Coffee",
+  tagline: "Coffee to go, in 60 seconds.",
+  accent: "#0B7A66",              // brand color (keep it dark enough for white text)
+  timezone: "Asia/Manila",
+  currency: "₱",
+
+  // Chat apps. Numbers: country code + number, digits only (no + or spaces).
+  channels: {
+    whatsapp:  "639171234567",
+    messenger: "beanandgo",       // Facebook page username
+    instagram: "beanandgo",
+    telegram:  "",
+    viber:     "",
+    tiktok:    ""
+  },
+  whatsappGreeting: "Hi Bean & Go! I'd like to order.",
+
+  // Format: "HH:MM-HH:MM" in 24-hour time, or "closed"
+  hours: {
+    Mon: "07:00-19:00", Tue: "07:00-19:00", Wed: "07:00-19:00",
+    Thu: "07:00-19:00", Fri: "07:00-20:00", Sat: "08:00-20:00", Sun: "closed"
+  },
+
+  address: "123 Rizal Street, Quezon City",
+  mapsLink: "",                   // optional: paste a Google Maps share link, else one is made from the address
+
+  menuTitle: "Menu",
+  menu: [
+    { name: "Iced Latte",     price: 120, desc: "Double shot, milk, ice" },
+    { name: "Spanish Latte",  price: 140, desc: "Sweet, creamy, cold" },
+    { name: "Ham & Cheese Croissant", price: 95, desc: "Toasted to order" }
+  ],
+
+  showBranding: true              // small "Made with ChatSite" footer
+};
+</script>
+
+<main class="wrap">
+  <section class="hero">
+    <h1 id="name"></h1>
+    <p class="tagline" id="tagline"></p>
+    <div class="status" id="status" hidden><span class="dot"></span><span id="statusText"></span></div>
+  </section>
+
+  <section id="chatSection" hidden>
+    <h2>Message us</h2>
+    <div class="channels" id="channels"></div>
+  </section>
+
+  <section id="menuSection" hidden>
+    <h2 id="menuTitle"></h2>
+    <div class="block" id="menu"></div>
+  </section>
+
+  <section id="hoursSection" hidden>
+    <h2>Hours</h2>
+    <div class="block" id="hours"></div>
+  </section>
+
+  <section id="placeSection" hidden>
+    <h2>Find us</h2>
+    <div class="block place"><span id="address"></span><br><a id="mapLink" target="_blank" rel="noopener">Open in Maps</a></div>
+  </section>
+
+  <footer id="brand" hidden>Made with <a href="#">ChatSite</a></footer>
+</main>
+
+<script>
+(function () {
+  const C = CONFIG;
+  const $ = (id) => document.getElementById(id);
+  const DAY_ORDER = ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"];
+  const DAY_FULL = { Mon:"Monday", Tue:"Tuesday", Wed:"Wednesday", Thu:"Thursday", Fri:"Friday", Sat:"Saturday", Sun:"Sunday" };
+
+  // Basics
+  document.title = C.name;
+  document.documentElement.style.setProperty("--accent", C.accent);
+  const theme = document.querySelector('meta[name="theme-color"]');
+  if (theme) theme.setAttribute("content", C.accent);
+  $("name").textContent = C.name;
+  $("tagline").textContent = C.tagline || "";
+
+  // Chat channels
+  const clean = (s) => String(s || "").replace(/^@/, "").trim();
+  const digits = (s) => String(s || "").replace(/\D/g, "");
+  const CHANNELS = [
+    { key: "whatsapp",  label: "WhatsApp",  mark: "W",  color: "#1FA855",
+      href: (v) => "https://wa.me/" + digits(v) + (C.whatsappGreeting ? "?text=" + encodeURIComponent(C.whatsappGreeting) : ""),
+      handle: (v) => "+" + digits(v) },
+    { key: "messenger", label: "Messenger", mark: "M",  color: "#0A7CFF",
+      href: (v) => "https://m.me/" + clean(v), handle: (v) => "facebook.com/" + clean(v) },
+    { key: "instagram", label: "Instagram", mark: "IG", color: "#D62976",
+      href: (v) => "https://ig.me/m/" + clean(v), handle: (v) => "@" + clean(v) },
+    { key: "telegram",  label: "Telegram",  mark: "T",  color: "#229ED9",
+      href: (v) => "https://t.me/" + clean(v), handle: (v) => "@" + clean(v) },
+    { key: "viber",     label: "Viber",     mark: "V",  color: "#7360F2",
+      href: (v) => "viber://chat?number=%2B" + digits(v), handle: (v) => "+" + digits(v) },
+    { key: "tiktok",    label: "TikTok",    mark: "TT", color: "#111111",
+      href: (v) => "https://www.tiktok.com/@" + clean(v), handle: (v) => "@" + clean(v) }
+  ];
+
+  let shown = 0;
+  CHANNELS.forEach((ch) => {
+    const v = C.channels[ch.key];
+    if (!v || !String(v).trim()) return;
+    const a = document.createElement("a");
+    a.className = "channel";
+    a.href = ch.href(v);
+    a.target = "_blank";
+    a.rel = "noopener";
+
+    const mark = document.createElement("span");
+    mark.className = "mark";
+    mark.style.background = ch.color;
+    mark.textContent = ch.mark;
+
+    const text = document.createElement("span");
+    const n = document.createElement("div");
+    n.className = "name"; n.textContent = ch.label;
+    const h = document.createElement("div");
+    h.className = "handle"; h.textContent = ch.handle(v);
+    text.append(n, h);
+
+    const go = document.createElement("span");
+    go.className = "go"; go.textContent = "Chat";
+
+    a.append(mark, text, go);
+    $("channels").appendChild(a);
+    shown++;
+  });
+  if (shown) $("chatSection").hidden = false;
+
+  // Menu
+  if (C.menu && C.menu.length) {
+    $("menuTitle").textContent = C.menuTitle || "Menu";
+    C.menu.forEach((it) => {
+      const item = document.createElement("div");
+      item.className = "item";
+      const row = document.createElement("div");
+      row.className = "row";
+      const t = document.createElement("span"); t.className = "title"; t.textContent = it.name;
+      const f = document.createElement("span"); f.className = "fill";
+      const p = document.createElement("span"); p.className = "price";
+      p.textContent = (it.price !== undefined && it.price !== "") ? (C.currency || "") + it.price : "";
+      row.append(t, f, p);
+      item.appendChild(row);
+      if (it.desc) {
+        const d = document.createElement("div"); d.className = "desc"; d.textContent = it.desc;
+        item.appendChild(d);
+      }
+      $("menu").appendChild(item);
+    });
+    $("menuSection").hidden = false;
+  }
+
+  // Hours + open/closed status
+  const fmt = (t) => {
+    const [h, m] = t.split(":").map(Number);
+    const ap = h >= 12 ? "PM" : "AM";
+    const h12 = h % 12 === 0 ? 12 : h % 12;
+    return h12 + ":" + String(m).padStart(2, "0") + " " + ap;
+  };
+  const mins = (t) => { const [h, m] = t.split(":").map(Number); return h * 60 + m; };
+  const range = (s) => {
+    if (!s || String(s).toLowerCase() === "closed") return null;
+    const [a, b] = s.split("-").map((x) => x.trim());
+    return a && b ? [a, b] : null;
+  };
+
+  if (C.hours) {
+    let today = null, nowMin = 0;
+    try {
+      const parts = new Intl.DateTimeFormat("en-US", {
+        timeZone: C.timezone, weekday: "short", hour: "numeric", minute: "numeric", hour12: false
+      }).formatToParts(new Date());
+      const get = (t) => (parts.find((p) => p.type === t) || {}).value;
+      today = get("weekday");
+      nowMin = (parseInt(get("hour"), 10) % 24) * 60 + parseInt(get("minute"), 10);
+    } catch (e) { today = null; }
+
+    DAY_ORDER.forEach((d) => {
+      const r = range(C.hours[d]);
+      const row = document.createElement("div");
+      row.className = "hours-row" + (d === today ? " today" : "");
+      const a = document.createElement("span"); a.textContent = DAY_FULL[d];
+      const b = document.createElement("span"); b.textContent = r ? fmt(r[0]) + " – " + fmt(r[1]) : "Closed";
+      row.append(a, b);
+      $("hours").appendChild(row);
+    });
+    $("hoursSection").hidden = false;
+
+    if (today) {
+      const r = range(C.hours[today]);
+      let text = "", cls = "closed";
+      if (r && nowMin >= mins(r[0]) && nowMin < mins(r[1])) {
+        text = "Open now, until " + fmt(r[1]); cls = "open";
+      } else if (r && nowMin < mins(r[0])) {
+        text = "Closed, opens today at " + fmt(r[0]);
+      } else {
+        const start = DAY_ORDER.indexOf(today);
+        text = "Closed right now";
+        for (let i = 1; i <= 7; i++) {
+          const d = DAY_ORDER[(start + i) % 7];
+          const nr = range(C.hours[d]);
+          if (nr) { text = "Closed, opens " + (i === 1 ? "tomorrow" : DAY_FULL[d]) + " at " + fmt(nr[0]); break; }
+        }
+      }
+      $("statusText").textContent = text;
+      $("status").classList.add(cls);
+      $("status").hidden = false;
+    }
+  }
+
+  // Location
+  if (C.address) {
+    $("address").textContent = C.address;
+    $("mapLink").href = C.mapsLink || "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(C.address);
+    $("placeSection").hidden = false;
+  }
+
+  if (C.showBranding) $("brand").hidden = false;
+})();
+</script>
+</body>
+</html>
